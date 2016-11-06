@@ -2,9 +2,12 @@ package lifelessplanetinc.kpo_kurs_gpsalarm;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         RecyclerView rv = (RecyclerView) findViewById(R.id.alarms_list_rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(new AlarmListAdapter(alarms_list));
+        AlarmListAdapter adapter = new AlarmListAdapter(alarms_list);
+        adapter.setOnItemClickListener(new AlarmListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                String mess = alarms_list.get(position).getTitle();
+                Toast.makeText(itemView.getContext(),mess + "clicked",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View itemView, int position) {
+                String mess = alarms_list.get(position).getTitle();
+                Toast.makeText(itemView.getContext(),mess + "long clicked",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemIconClick(View itemView, int position) {
+                String mess = alarms_list.get(position).getTitle();
+                Toast.makeText(itemView.getContext(),mess + "icon",Toast.LENGTH_SHORT).show();
+            }
+        });
+        rv.setAdapter(adapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void initializeData() {

@@ -11,6 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/card_item"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
         card_view:cardElevation = "5dp">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/title"
                 android:layout_alignParentTop = "true"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textColor="@color/alarm_title_color" />
             <TextView
                 android:layout_width="wrap_content"
@@ -29,6 +32,7 @@
                 android:id="@+id/destination"
                 android:layout_below="@+id/title"/>
             <ImageButton
+                android:id="@+id/alarm_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/alarm_cardview_item_icon"
