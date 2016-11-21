@@ -1,6 +1,8 @@
 package lifelessplanetinc.kpo_kurs_gpsalarm;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         RecyclerView rv = (RecyclerView) findViewById(R.id.alarms_list_rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setItemAnimator(new DefaultItemAnimator());
         AlarmListAdapter adapter = new AlarmListAdapter(alarms_list);
         adapter.setOnItemClickListener(new AlarmListAdapter.OnItemClickListener() {
             @Override
@@ -45,7 +48,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rv.setAdapter(adapter);
-        rv.setItemAnimator(new DefaultItemAnimator());
+
+        FloatingActionButton add_alarm_fab = (FloatingActionButton) findViewById(R.id.add_new_alarm_fab);
+        add_alarm_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),AddNewAlarm.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeData() {
