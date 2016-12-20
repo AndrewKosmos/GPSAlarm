@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +21,17 @@ import lifelessplanetinc.kpo_kurs_gpsalarm.Classes.Alarm;
 
 public class MainActivity extends AppCompatActivity {
     public List<Alarm> alarms_list;
+    private RecyclerView rv;
+    private AlarmListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeData();
         setContentView(R.layout.activity_main);
-        RecyclerView rv = (RecyclerView) findViewById(R.id.alarms_list_rv);
+        iniData();
+        rv = (RecyclerView) findViewById(R.id.alarms_list_rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
-        AlarmListAdapter adapter = new AlarmListAdapter(alarms_list);
+        adapter = new AlarmListAdapter(alarms_list);
         adapter.setOnItemClickListener(new AlarmListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -54,26 +58,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(),AddNewAlarm.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
+
+
     }
 
-    private void initializeData() {
+    private void iniData() {
         alarms_list = new ArrayList<>();
-        alarms_list.add(new Alarm("Alarm 1","Ul'yanovsk ul. Severny Venec,32",true));
-        alarms_list.add(new Alarm("Alarm 2","Ul'yanovsk ul. Severny Venec,32",true));
-        alarms_list.add(new Alarm("Alarm 3","Ul'yanovsk ul. Severny Venec,32",false));
-        alarms_list.add(new Alarm("Alarm 4","Ul'yanovsk ul. Severny Venec,32",false));
-        alarms_list.add(new Alarm("Alarm 5","Ul'yanovsk ul. Severny Venec,32",false));
-        alarms_list.add(new Alarm("Alarm 6","Ul'yanovsk ul. Severny Venec,32",false));
-        alarms_list.add(new Alarm("Alarm 7","Ul'yanovsk ul. Severny Venec,32",false));
-        alarms_list.add(new Alarm("Alarm 8","Ul'yanovsk ul. Severny Venec,32",false));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data == null) {return;}
+        LatLng c;
+        String d;
+        String Name;
+
+        c = (LatLng) data.getExtras().get("coords");
+        d = data.getStringExtra("destination");
+        Name = data.getStringExtra("Name");
+
+        if(Name != "")
+        {
+            Alarm a = new Alarm(Name,d,c,true);
+            alarms_list.add(a);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

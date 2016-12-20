@@ -31,6 +31,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBl55BnWMFicm-ihtI4dyd1eNEaGVsZLME" />
 
+        <activity android:name=".MapActivity"></activity>
     </application>
 
 </manifest>
