@@ -50,7 +50,7 @@ public class AddNewAlarm extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Name = editText.getText().toString();
-                if(Name != "")
+                if(!Name.isEmpty())
                 {
                     Intent intent = new Intent();
                     intent.putExtra("coords",coords);

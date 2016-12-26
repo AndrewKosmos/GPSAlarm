@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static int FATEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 1;
     public boolean Activate = false;
+    public String Activate_name;
+    public String Activate_dest;
+    public int Upd_position;
 
     public ScheduledExecutorService sheScheduledExecutorService;
 
@@ -73,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onItemLongClick(View itemView, int position) {
                 String mess = alarms_list.get(position).getTitle();
-                Toast.makeText(itemView.getContext(), mess + "long clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(itemView.getContext(), mess + "long clicked", Toast.LENGTH_SHORT).show();
+                alarms_list.remove(position);
+                adapter.notifyItemRemoved(position);
             }
 
             @Override
@@ -145,21 +150,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        LatLng c;
-        String d;
-        String Name;
+        if(requestCode == 1)
+        {
+            if (data == null) {
+                return;
+            }
+            LatLng c;
+            String d;
+            String Name;
 
-        c = (LatLng) data.getExtras().get("coords");
-        d = data.getStringExtra("destination");
-        Name = data.getStringExtra("Name");
+            c = (LatLng) data.getExtras().get("coords");
+            d = data.getStringExtra("destination");
+            Name = data.getStringExtra("Name");
 
-        if (Name != "") {
-            Alarm a = new Alarm(Name, d, c, true);
-            alarms_list.add(a);
-            adapter.notifyDataSetChanged();
+            if (Name != "") {
+                Alarm a = new Alarm(Name, d, c, true);
+                alarms_list.add(a);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -228,9 +236,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 if(distanceInMeters <= 100)
                 {
                     Activate = true;
+                    Activate_name = alarms_list.get(i).getTitle();
+                    Activate_dest = alarms_list.get(i).getDestination();
+                    checkActivation();
+                    alarms_list.remove(i);
+                    adapter.notifyDataSetChanged();
                     break;
                 }
             }
         }
+    }
+
+    public void checkActivation()
+    {
+            Intent intent = new Intent(MainActivity.this, AlarmScreen.class);
+            intent.putExtra("Name",Activate_name);
+            intent.putExtra("dest",Activate_dest);
+            startActivity(intent);
     }
 }

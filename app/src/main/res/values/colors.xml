@@ -5,4 +5,7 @@
     <color name="colorAccent">#dd2c00</color>
     <color name="cardview_light_background">#ffffff</color>
     <color name="alarm_title_color">#000000</color>
+    <color name="alarm_screen_bg">#261F1C</color>
+    <color name="alarm_screen_dark_text">#6B5D56</color>
+    <color name="alarm_screen_orange_text">#FC5900</color>
 </resources>
