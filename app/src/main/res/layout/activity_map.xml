@@ -5,12 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="lifelessplanetinc.kpo_kurs_gpsalarm.MapActivity">
-
+    
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.MapFragment" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_adr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.SearchView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_alarm_adress_fab"

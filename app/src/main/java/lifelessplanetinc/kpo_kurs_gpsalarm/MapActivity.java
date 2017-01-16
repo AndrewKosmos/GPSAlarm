@@ -1,5 +1,6 @@
 package lifelessplanetinc.kpo_kurs_gpsalarm;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -7,10 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.identity.intents.Address;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +35,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         View.OnClickListener{
     private GoogleApiClient googleApiClient;
     private GoogleMap mMap;
+    SearchView searchView;
+
 
     private LatLng coordinates;
     private String destination;
@@ -56,6 +62,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 finish();
             }
         });
+
+        searchView = (SearchView)findViewById(R.id.search_adr);
+        searchView.setQueryHint("Enter address");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search_address(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private  void search_address(String query)
+    {
+        double lat = 0.0,lng=0.0;
+        Geocoder geocoder = new Geocoder(this,Locale.getDefault());
+        try{
+            List<android.location.Address> Addresses = geocoder.getFromLocationName(query,1);
+            if(Addresses.size() > 0)
+            {
+                lat = Addresses.get(0).getLatitude();
+                lng = Addresses.get(0).getLongitude();
+                LatLng search_coords = new LatLng(lat,lng);
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(search_coords).draggable(true));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(search_coords));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                coordinates = search_coords;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void initMap(){
